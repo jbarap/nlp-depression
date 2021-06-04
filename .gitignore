@@ -1,0 +1,10 @@
+# environments
+.python-version
+.env
+
+# data
+data/*
+
+**/*/__pycache__
+**/*/.ipynb_checkpoints
+
