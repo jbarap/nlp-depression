@@ -31,14 +31,18 @@ def predict(sentences, data_path='data/', tokenizer=None, model=None):
     if model:
         model = AutoModelForSequenceClassification.from_pretrained(data_path / model)
     else:
-        model = AutoModelForSequenceClassification.from_pretrained(data_path / 'bert-model')
+        model = AutoModelForSequenceClassification.from_pretrained('bert-base-cased')
 
     custom_text_pipeline = pipeline('sentiment-analysis',
                                     model=model,
                                     tokenizer=tokenizer,
                                     device=0 if torch.cuda.is_available() else -1)
 
-    results = custom_text_pipeline(sentences)
+    results = custom_text_pipeline(sentences,
+                                   truncation=True,
+                                   padding="max_length",
+                                   max_length=90)
+
     results = format_results(sentences, results)
 
     print("The prediction is: ", results)
@@ -58,6 +62,12 @@ if __name__ == '__main__':
                         help="Use a voice recognition model to perform inference over an audio transcription. "
                         "If the 'record' string is given as an argument, it will prompt for a recording, "
                         "otherwise provide the path to the audio file as an argument.")
+
+    parser.add_argument('--model', default='bert_labels_corrected',
+                        help="")
+
+    parser.add_argument('--tokenizer', default=None,
+                        help="")
 
     parser.add_argument('--data_path', default="data/",
                         help="Base path to the directory where all the pretrained models are stored, default=data/")
@@ -80,5 +90,5 @@ if __name__ == '__main__':
 
     print('The input sentences are:', sentences)
 
-    predict(sentences, args.data_path)
+    predict(sentences, args.data_path, tokenizer=args.tokenizer, model=args.model)
 
