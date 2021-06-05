@@ -1,3 +1,7 @@
+# NLP text and audio analysis to potentially identify depression
+- Note: install pytorch manually if not in colab
+
+
 ## Dataset
 From: https://www.kaggle.com/nikhileswarkomati/suicide-watch
 - `kaggle datasets download -d nikhileswarkomati/suicide-watch -p data/depression`
