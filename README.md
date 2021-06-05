@@ -79,13 +79,13 @@ used a simple, but effective unsupervised method for noisy label correction.
 The method can be summarized as follows:
 
 1. Remove oddities from the dataset
-  - Removed posts/comments, user and subreddit mentions, urls, emojis, etc.
+    - Removed posts/comments, user and subreddit mentions, urls, emojis, etc.
 2. Embedd each text into an n-dimensional space
-  - We used [Google's universal-sentence-encoder][3]
+    - We used [Google's universal-sentence-encoder][3]
 3. Reduce the space dimensionality to aid with clustering performance
-  - We used [UMAP: Uniform Manifold Approximation and Projection][4]
+    - We used [UMAP: Uniform Manifold Approximation and Projection][4]
 4. Use a clustering algorithm to find k class clusters
-  - We used [K-Means clustering][5]
+    - We used [K-Means clustering][5]
 5. Compute the distance of every point to all clusters to get a soft 'confidence' score
 6. Re-label the points with confidence >= 0.9, keep the same otherwise
 
