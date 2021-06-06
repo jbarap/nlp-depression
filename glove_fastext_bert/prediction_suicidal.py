@@ -20,19 +20,6 @@ import zipfile
 import tensorflow as tf
 import tensorflow_text as text
 from numpy import array
-from keras.preprocessing.text import one_hot
-from keras.preprocessing.sequence import pad_sequences
-from keras.models import Sequential
-from keras.layers.core import Activation, Dropout, Dense
-from keras.layers import Flatten, LSTM,SimpleRNN,GRU,RNN
-from keras.layers import GlobalMaxPooling1D
-from keras.models import Model
-from keras.layers.embeddings import Embedding
-from sklearn.model_selection import train_test_split
-from keras.preprocessing.text import Tokenizer
-from keras.layers import Input
-from keras.layers.merge import Concatenate
-from tensorflow.keras import layers
 import pandas as pd
 import numpy as np
 import re
@@ -42,9 +29,6 @@ from numpy import asarray
 from numpy import zeros
 import tensorflow_hub as hub
 import tensorflow as tf
-from official.nlp import optimization 
-from tensorflow.keras import layers
-from tensorflow.keras.layers.experimental import preprocessing
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 #from __future__ import absolute_import, division, print_function, unicode_literals
