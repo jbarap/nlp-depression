@@ -36,6 +36,7 @@ from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.preprocessing.text import Tokenizer
 import pickle
+from keras.preprocessing.sequence import pad_sequences
 
 def preprocess_text(sen):
     # Remove punctuations and numbers
