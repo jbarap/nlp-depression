@@ -73,51 +73,28 @@ word2='Beatiful world baby'
 x=convert2embeding ([word2])
 print(x)
 
-glove_dataset_dep='/content/content/gdrive/MyDrive/Clasificador/nlp/glove_suicidal.h5'
-fasttext_dataset_dep='/content/content/gdrive/MyDrive/Clasificador/nlp/fasttext_dataset_hugging.h5'
-
-bert_sucidal = tf.saved_model.load('/content/content/gdrive/MyDrive/Clasificador/nlp/bert_suicidal')
-bert_sadness = tf.saved_model.load('/content/content/gdrive/MyDrive/Clasificador/nlp/bert_sadness')
-
-glove = keras.models.load_model(glove_dataset_dep)
-fasttext = keras.models.load_model(fasttext_dataset_dep)
 
 def predictions (word2pred,glove_model,fasttext_model,bert_sucidal,bert_sadness):
   final_pred=[]
   bert_result=tf.sigmoid(bert_sucidal(tf.constant([word2pred])))
   bert_result=bert_result.numpy()[0][0]
-  #print(bert_result)
 
   bert_sad_result=tf.sigmoid(bert_sadness(tf.constant([word2pred])))
   bert_sad_result=bert_sad_result.numpy()[0][0]
-  #print(bert_sad_result)
 
-  #print(bert_result >= .60)
 
   if bert_result > .60:
-    #print('bert_sucidal')
     final_pred.append([bert_result,1-bert_result])
     final_pred=final_pred[0]
+
   else:
-    #print('1')
     convertion=convert2embeding([word2pred])
-    #print('2')
     glove_pred = glove_model.predict(convertion)
-    #print('3')
     fastext_pred = fasttext_model.predict(convertion)
-    #print('4')
     for pred in range(len(glove_pred)):
-      #print('pred=', pred)
       final_pred.append((glove_pred[pred]+fastext_pred[pred])/2)
-      #print('final_pred=', final_pred)
-      #print("final_pred = ",final_pred)
-      #print("glove_pred[pred] = ",glove_pred[pred])
-      #print("fastext_pred[pred] = ",fastext_pred[pred])
     final_pred[0][1]=(final_pred[0][1]+bert_sad_result)/2
     final_pred[0][0]=(final_pred[0][0])/1.1
     final_pred=final_pred[0]
   return final_pred
 
-frase='i want to '
-x=predictions (frase,glove,fasttext,bert_sucidal,bert_sadness)
-print(x)

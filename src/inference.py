@@ -7,11 +7,18 @@ from transformers import AutoTokenizer
 from transformers import AutoModelForSequenceClassification
 from transformers import pipeline
 
+import tensorflow as tf
+import tensorflow_text as text
+from keras.preprocessing.sequence import pad_sequences
+from tensorflow import keras
+from tensorflow.keras import layers
+
 from src import voice_recognition
+from src.glove_fastext_bert.prediction_suicidal import predictions
 
 
 def format_results(sentences, results):
-    classes = {'LABEL_0': 'Non-suicide', 'LABEL_1': 'Suicide'}
+    classes = {'LABEL_0': 'Non-suicidal', 'LABEL_1': 'Suicidal'}
 
     formatted_results = []
     for sent, res in zip(sentences, results):
@@ -23,27 +30,36 @@ def format_results(sentences, results):
 def predict(sentences, data_path='data/', tokenizer=None, model=None):
     data_path = Path(data_path)
 
-    if tokenizer:
-        tokenizer = AutoTokenizer.from_pretrained(data_path / tokenizer)
-    else:
+    if model == 'hf_bert_corrected':
         tokenizer = AutoTokenizer.from_pretrained('bert-base-cased')
+        model = AutoModelForSequenceClassification.from_pretrained(data_path / 'bert_labels_corrected')
 
-    if model:
-        model = AutoModelForSequenceClassification.from_pretrained(data_path / model)
-    else:
-        model = AutoModelForSequenceClassification.from_pretrained('bert-base-cased')
+        custom_text_pipeline = pipeline('sentiment-analysis',
+                                        model=model,
+                                        tokenizer=tokenizer,
+                                        device=0 if torch.cuda.is_available() else -1)
 
-    custom_text_pipeline = pipeline('sentiment-analysis',
-                                    model=model,
-                                    tokenizer=tokenizer,
-                                    device=0 if torch.cuda.is_available() else -1)
+        results = custom_text_pipeline(sentences,
+                                       truncation=True,
+                                       padding="max_length",
+                                       max_length=90)
 
-    results = custom_text_pipeline(sentences,
-                                   truncation=True,
-                                   padding="max_length",
-                                   max_length=90)
+        results = format_results(sentences, results)
 
-    results = format_results(sentences, results)
+    elif model == 'tf_ensemble_corrected':
+        glove_dataset_dep = '/content/content/gdrive/MyDrive/Clasificador/nlp/glove_suicidal.h5'
+        fasttext_dataset_dep = '/content/content/gdrive/MyDrive/Clasificador/nlp/fasttext_dataset_hugging.h5'
+
+        bert_sucidal = tf.saved_model.load('/content/content/gdrive/MyDrive/Clasificador/nlp/bert_suicidal')
+        bert_sadness = tf.saved_model.load('/content/content/gdrive/MyDrive/Clasificador/nlp/bert_sadness')
+        glove = keras.models.load_model(glove_dataset_dep)
+        fasttext = keras.models.load_model(fasttext_dataset_dep)
+
+        results = []
+        for s in sentences:
+            r = predictions(s, glove, fasttext, bert_sucidal, bert_sadness)
+            decision = 'Non-suicidal' if r[0] > r[1] else 'suicidal'
+            results.append((s, decision))
 
     print("The prediction is: ", results)
 
@@ -63,10 +79,8 @@ if __name__ == '__main__':
                         "If the 'record' string is given as an argument, it will prompt for a recording, "
                         "otherwise provide the path to the audio file as an argument.")
 
-    parser.add_argument('--model', default='bert_labels_corrected',
-                        help="")
-
-    parser.add_argument('--tokenizer', default=None,
+    parser.add_argument('--model', default='hf_bert_corrected',
+                        choices=['hf_bert_corrected', 'tf_ensemble_corrected'],
                         help="")
 
     parser.add_argument('--data_path', default="data/",
@@ -90,5 +104,5 @@ if __name__ == '__main__':
 
     print('The input sentences are:', sentences)
 
-    predict(sentences, args.data_path, tokenizer=args.tokenizer, model=args.model)
+    predict(sentences, args.data_path, model=args.model)
 

@@ -84,6 +84,7 @@ scikit-learn==0.24.1
 scipy==1.6.2
 Send2Trash==1.5.0
 sentencepiece==0.1.95
+sklearn
 six==1.15.0
 sounddevice==0.4.1
 SoundFile==0.10.3.post1
@@ -99,6 +100,7 @@ termcolor==1.1.0
 terminado==0.9.4
 testpath==0.4.4
 textsearch==0.0.21
+tf-models-official
 threadpoolctl==2.1.0
 tqdm==4.60.0
 traitlets==5.0.5
