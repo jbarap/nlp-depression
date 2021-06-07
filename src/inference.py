@@ -91,11 +91,11 @@ if __name__ == '__main__':
 
     if args.demo:
         sentences = [
-            "I don't like the way this day is going.",
-            "The movie was quite bad to be honest with you.",
-            "I feel like I'm killing it",
-            "No more content like this please.",
-            "This piece of music is really enjoyable."
+            "I don't know what to do anymore. I'm starting to feel alone, and my family isn't great either",
+            "The world is a cold place, often you are hated by strangers and there's nothing to do about it.",
+            "Not a good start. I didn't get my favorite breakfast this time, oh well.",
+            "Today was as good as it gets, minus the extra homework.",
+            "I quite enjoyed the meal, it had a unique taste."
         ]
     elif args.input:
         sentences = args.input.split("&&")
