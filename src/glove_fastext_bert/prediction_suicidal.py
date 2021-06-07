@@ -47,6 +47,7 @@ def preprocess_text(sen):
     sentence = re.sub(r'\s+', ' ', sentence)
     return sentence
 
+
 def convert2embeding (word):
   with open('data/content/gdrive/MyDrive/Clasificador/nlp/tokenizer.pickle', 'rb') as handle:
     tokenizer = pickle.load(handle)
@@ -69,9 +70,6 @@ def convert2embeding (word):
   final_word = pad_sequences([final], padding='post', maxlen=maxlen)
   #print(final_word)
   return final_word
-word2='Beatiful world baby'
-x=convert2embeding ([word2])
-print(x)
 
 
 def predictions (word2pred,glove_model,fasttext_model,bert_sucidal,bert_sadness):
