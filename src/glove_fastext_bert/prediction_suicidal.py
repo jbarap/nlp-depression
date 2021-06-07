@@ -29,7 +29,6 @@ from numpy import asarray
 from numpy import zeros
 import tensorflow_hub as hub
 import tensorflow as tf
-import tensorflow as tf
 from sklearn.model_selection import train_test_split
 #from __future__ import absolute_import, division, print_function, unicode_literals
 from tensorflow import keras
@@ -37,6 +36,7 @@ from tensorflow.keras import layers
 from tensorflow.keras.preprocessing.text import Tokenizer
 import pickle
 from keras.preprocessing.sequence import pad_sequences
+
 
 def preprocess_text(sen):
     # Remove punctuations and numbers
@@ -48,7 +48,7 @@ def preprocess_text(sen):
     return sentence
 
 def convert2embeding (word):
-  with open('/content/content/gdrive/MyDrive/Clasificador/nlp/tokenizer.pickle', 'rb') as handle:
+  with open('data/content/gdrive/MyDrive/Clasificador/nlp/tokenizer.pickle', 'rb') as handle:
     tokenizer = pickle.load(handle)
   X = []
   sentences = list(word)

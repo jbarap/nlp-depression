@@ -47,11 +47,11 @@ def predict(sentences, data_path='data/', tokenizer=None, model=None):
         results = format_results(sentences, results)
 
     elif model == 'tf_ensemble_corrected':
-        glove_dataset_dep = '/content/content/gdrive/MyDrive/Clasificador/nlp/glove_suicidal.h5'
-        fasttext_dataset_dep = '/content/content/gdrive/MyDrive/Clasificador/nlp/fasttext_dataset_hugging.h5'
+        glove_dataset_dep = 'data/content/gdrive/MyDrive/Clasificador/nlp/glove_suicidal.h5'
+        fasttext_dataset_dep = 'data/content/gdrive/MyDrive/Clasificador/nlp/fasttext_dataset_hugging.h5'
 
-        bert_sucidal = tf.saved_model.load('/content/content/gdrive/MyDrive/Clasificador/nlp/bert_suicidal')
-        bert_sadness = tf.saved_model.load('/content/content/gdrive/MyDrive/Clasificador/nlp/bert_sadness')
+        bert_sucidal = tf.saved_model.load('data/content/gdrive/MyDrive/Clasificador/nlp/bert_suicidal')
+        bert_sadness = tf.saved_model.load('data/content/gdrive/MyDrive/Clasificador/nlp/bert_sadness')
         glove = keras.models.load_model(glove_dataset_dep)
         fasttext = keras.models.load_model(fasttext_dataset_dep)
 
